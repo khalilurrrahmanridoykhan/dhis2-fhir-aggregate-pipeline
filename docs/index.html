@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FHIR to DHIS2 Aggregate Pipeline</title>
+<style>
+  :root {
+    --bg: #f7f7f8;
+    --panel: #ffffff;
+    --border: #d9dce1;
+    --text: #1f2328;
+    --muted: #5b6270;
+    --accent: #2563eb;
+    --ok: #15803d;
+    --ok-bg: #eafaf1;
+    --warn: #926a00;
+    --warn-bg: #fff6e0;
+    --mono: "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15181d;
+      --panel: #1d2127;
+      --border: #30353d;
+      --text: #e6e8eb;
+      --muted: #9aa1ac;
+      --accent: #5b9dff;
+      --ok: #4ade80;
+      --ok-bg: #122a1d;
+      --warn: #facc15;
+      --warn-bg: #2b2311;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.5;
+  }
+  header, main, footer { max-width: 880px; margin: 0 auto; padding: 0 16px; }
+  header { padding-top: 24px; }
+  header h1 { margin: 0 0 4px; font-size: 1.5rem; }
+  header p { margin: 0; color: var(--muted); }
+  header a { color: var(--accent); }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin: 16px 0;
+  }
+  .panel h2 { margin: 0 0 8px; font-size: 1rem; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  input[type="url"], input[type="number"] {
+    flex: 1;
+    min-width: 200px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 0.85rem;
+  }
+  textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    resize: vertical;
+  }
+  button {
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+  button:hover { border-color: var(--accent); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  #status { color: var(--muted); font-size: 0.85rem; margin-top: 6px; }
+  #status.error { color: #b91c1c; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 10px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+  .skipped { background: var(--warn-bg); color: var(--warn); padding: 8px 10px; border-radius: 6px; font-family: var(--mono); font-size: 0.78rem; margin-top: 10px; }
+  .write-note {
+    background: var(--warn-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 0.85rem;
+  }
+  .write-note code {
+    display: block;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-top: 8px;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    overflow-x: auto;
+  }
+  footer { color: var(--muted); font-size: 0.8rem; margin: 24px auto 40px; }
+  footer a { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>FHIR to DHIS2 Aggregate Pipeline</h1>
+  <p>
+    Fetches FHIR <code>Immunization</code> resources and aggregates them into DHIS2's dataValueSets shape,
+    entirely in your browser. Part of
+    <a href="https://github.com/khalilurrrahmanridoykhan/dhis2-fhir-aggregate-pipeline" target="_blank" rel="noopener">dhis2-fhir-aggregate-pipeline</a>.
+  </p>
+</header>
+
+<main>
+  <section class="panel">
+    <h2>1. Get FHIR Immunization resources</h2>
+    <div class="row">
+      <button data-example="fixture">Load sample fixture</button>
+    </div>
+    <div class="row">
+      <input type="url" id="fhir-url" placeholder="https://r4.smarthealthit.org/Immunization?_count=20" />
+      <input type="number" id="fhir-count" value="20" min="1" max="100" style="max-width: 90px" />
+      <button data-fetch="fhir">Fetch</button>
+    </div>
+    <textarea id="resources-text" placeholder="...or paste a JSON array of Immunization resources here"></textarea>
+  </section>
+
+  <div class="row">
+    <button class="primary" id="aggregate-btn">Aggregate</button>
+    <span id="status"></span>
+  </div>
+
+  <section id="report"></section>
+
+  <section class="panel write-note" id="write-note" style="display:none">
+    <strong>Writing to DHIS2 can't run from this page.</strong>
+    The target server (<code style="display:inline;padding:0;border:0">play.im.dhis2.org</code>) doesn't send CORS headers,
+    so a browser blocks the write even with valid credentials -- this isn't something this page can work around.
+    Run it from a terminal instead, with the exact aggregate shown above:
+    <code id="write-command"></code>
+  </section>
+</main>
+
+<footer>
+  See the <a href="https://github.com/khalilurrrahmanridoykhan/dhis2-fhir-aggregate-pipeline" target="_blank" rel="noopener">README</a>
+  for the full v1 scope -- only 2 vaccine codes (CVX 19 BCG, CVX 37 Yellow Fever) are mapped; everything else is reported as skipped, not dropped.
+</footer>
+
+<script type="module" src="app.mjs"></script>
+</body>
+</html>

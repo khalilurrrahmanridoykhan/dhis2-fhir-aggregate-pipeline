@@ -1,0 +1,58 @@
+[
+  {
+    "resourceType": "Immunization",
+    "id": "sample-1",
+    "status": "completed",
+    "vaccineCode": { "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "19", "display": "BCG" }] },
+    "patient": { "reference": "Patient/pt-001" },
+    "occurrenceDateTime": "2026-10-03"
+  },
+  {
+    "resourceType": "Immunization",
+    "id": "sample-2",
+    "status": "completed",
+    "vaccineCode": { "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "19", "display": "BCG" }] },
+    "patient": { "reference": "Patient/pt-002" },
+    "occurrenceDateTime": "2026-10-14"
+  },
+  {
+    "resourceType": "Immunization",
+    "id": "sample-3",
+    "status": "completed",
+    "vaccineCode": { "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "19", "display": "BCG" }] },
+    "patient": { "reference": "Patient/pt-003" },
+    "occurrenceDateTime": "2026-10-22"
+  },
+  {
+    "resourceType": "Immunization",
+    "id": "sample-4",
+    "status": "completed",
+    "vaccineCode": { "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "19", "display": "BCG" }] },
+    "patient": { "reference": "Patient/pt-004" },
+    "occurrenceDateTime": "2026-11-05"
+  },
+  {
+    "resourceType": "Immunization",
+    "id": "sample-5",
+    "status": "completed",
+    "vaccineCode": { "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "37", "display": "yellow fever live" }] },
+    "patient": { "reference": "Patient/pt-005" },
+    "occurrenceDateTime": "2026-10-09"
+  },
+  {
+    "resourceType": "Immunization",
+    "id": "sample-6",
+    "status": "completed",
+    "vaccineCode": { "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "37", "display": "yellow fever live" }] },
+    "patient": { "reference": "Patient/pt-006" },
+    "occurrenceDateTime": "2026-10-19"
+  },
+  {
+    "resourceType": "Immunization",
+    "id": "sample-7-unmapped",
+    "status": "completed",
+    "vaccineCode": { "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "03", "display": "MMR" }] },
+    "patient": { "reference": "Patient/pt-007" },
+    "occurrenceDateTime": "2026-10-11"
+  }
+]
