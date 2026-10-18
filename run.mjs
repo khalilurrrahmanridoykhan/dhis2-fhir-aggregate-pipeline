@@ -44,22 +44,28 @@ async function main() {
   console.log(`Fetched ${resources.length} Immunization resource(s) from ${source}`);
 
   const { counts, skipped } = aggregateByVaccineAndPeriod(resources);
-  const dataValueSet = buildDataValueSet(counts);
+  const dataValueSets = buildDataValueSet(counts);
+  const totalRows = dataValueSets.reduce((sum, dvs) => sum + dvs.dataValues.length, 0);
 
-  console.log(`\nAggregated into ${dataValueSet.dataValues.length} dataValue(s):`);
-  dataValueSet.dataValues.forEach((dv) =>
-    console.log(`  dataElement=${dv.dataElement} period=${dv.period} value=${dv.value}`)
-  );
+  console.log(`\nAggregated into ${totalRows} dataValue(s) across ${dataValueSets.length} dataset(s):`);
+  dataValueSets.forEach((dvs) => {
+    console.log(`  dataSet=${dvs.dataSet}`);
+    dvs.dataValues.forEach((dv) =>
+      console.log(`    dataElement=${dv.dataElement} period=${dv.period} value=${dv.value}`)
+    );
+  });
 
   if (skipped.length) {
-    console.log(`\nSkipped (unmapped vaccine code, not counted): ${skipped.length}`);
-    skipped.forEach((s) => console.log(`  resource ${s.id}: code=${s.code}`));
+    console.log(`\nSkipped (not counted): ${skipped.length}`);
+    skipped.forEach((s) => console.log(`  resource ${s.id}: code=${s.code} -- ${s.reason}`));
   }
 
   if (flag === "--write") {
-    console.log("\nWriting to DHIS2...");
-    const result = await writeToDhis2(dataValueSet);
-    console.log(JSON.stringify(result, null, 2));
+    for (const dataValueSet of dataValueSets) {
+      console.log(`\nWriting dataSet=${dataValueSet.dataSet} to DHIS2...`);
+      const result = await writeToDhis2(dataValueSet);
+      console.log(JSON.stringify(result, null, 2));
+    }
   } else {
     console.log("\n(dry run -- pass --write to actually POST to DHIS2)");
   }

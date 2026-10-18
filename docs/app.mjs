@@ -60,33 +60,40 @@ document.getElementById("aggregate-btn").addEventListener("click", () => {
   }
 
   const { counts, skipped } = aggregateByVaccineAndPeriod(resources);
-  const dataValueSet = buildDataValueSet(counts);
+  const dataValueSets = buildDataValueSet(counts);
+  const totalRows = dataValueSets.reduce((sum, dvs) => sum + dvs.dataValues.length, 0);
 
   setStatus(
-    `Aggregated ${resources.length} resource(s) into ${dataValueSet.dataValues.length} dataValue row(s), ${skipped.length} skipped.`
+    `Aggregated ${resources.length} resource(s) into ${totalRows} dataValue row(s) across ${dataValueSets.length} dataset(s), ${skipped.length} skipped.`
   );
 
-  if (dataValueSet.dataValues.length) {
+  dataValueSets.forEach((dvs) => {
+    const heading = document.createElement("h3");
+    heading.style.margin = "10px 0 4px";
+    heading.style.fontSize = "0.9rem";
+    heading.textContent = `dataSet: ${dvs.dataSet}`;
+    reportEl.appendChild(heading);
+
     const table = document.createElement("table");
     table.innerHTML = `
       <thead><tr><th>dataElement</th><th>period</th><th>value</th></tr></thead>
       <tbody>
-        ${dataValueSet.dataValues
+        ${dvs.dataValues
           .map((dv) => `<tr><td>${dv.dataElement}</td><td>${dv.period}</td><td>${dv.value}</td></tr>`)
           .join("")}
       </tbody>
     `;
     reportEl.appendChild(table);
-  }
+  });
 
   if (skipped.length) {
     const div = document.createElement("div");
     div.className = "skipped";
-    div.textContent = `Skipped (unmapped vaccine code): ${skipped.map((s) => `${s.id ?? "?"} (code=${s.code})`).join(", ")}`;
+    div.textContent = `Skipped: ${skipped.map((s) => `${s.id ?? "?"} (${s.reason})`).join(", ")}`;
     reportEl.appendChild(div);
   }
 
-  if (dataValueSet.dataValues.length) {
+  if (totalRows) {
     writeCommand.textContent = `node run.mjs <your-source.json> --write`;
     writeNote.style.display = "block";
   }

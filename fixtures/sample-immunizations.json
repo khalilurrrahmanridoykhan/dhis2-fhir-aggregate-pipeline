@@ -70,5 +70,50 @@
     "vaccineCode": { "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "03", "display": "MMR" }] },
     "patient": { "reference": "Patient/pt-007" },
     "occurrenceDateTime": "2026-10-11"
+  },
+  {
+    "resourceType": "Immunization",
+    "id": "sample-10",
+    "status": "completed",
+    "vaccineCode": { "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "02", "display": "OPV, trivalent" }] },
+    "patient": { "reference": "Patient/pt-010" },
+    "occurrenceDateTime": "2026-10-04",
+    "protocolApplied": [{ "doseNumberPositiveInt": 1 }]
+  },
+  {
+    "resourceType": "Immunization",
+    "id": "sample-11",
+    "status": "completed",
+    "vaccineCode": { "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "02", "display": "OPV, trivalent" }] },
+    "patient": { "reference": "Patient/pt-011" },
+    "occurrenceDateTime": "2026-10-21",
+    "protocolApplied": [{ "doseNumberPositiveInt": 1 }]
+  },
+  {
+    "resourceType": "Immunization",
+    "id": "sample-12",
+    "status": "completed",
+    "vaccineCode": { "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "198", "display": "DTP-hepB-Hib Pentavalent Non-US" }] },
+    "patient": { "reference": "Patient/pt-012" },
+    "occurrenceDateTime": "2026-10-08",
+    "protocolApplied": [{ "doseNumberPositiveInt": 2 }]
+  },
+  {
+    "resourceType": "Immunization",
+    "id": "sample-13",
+    "status": "completed",
+    "vaccineCode": { "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "35", "display": "tetanus toxoid, adsorbed" }] },
+    "patient": { "reference": "Patient/pt-013" },
+    "occurrenceDateTime": "2026-10-13",
+    "protocolApplied": [{ "doseNumberPositiveInt": 1 }]
+  },
+  {
+    "resourceType": "Immunization",
+    "id": "sample-14-unknown-dose",
+    "status": "completed",
+    "vaccineCode": { "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "02", "display": "OPV, trivalent" }] },
+    "patient": { "reference": "Patient/pt-014" },
+    "occurrenceDateTime": "2026-10-15",
+    "protocolApplied": [{ "doseNumberPositiveInt": 9 }]
   }
 ]
