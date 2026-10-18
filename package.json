@@ -1,0 +1,21 @@
+{
+  "name": "dhis2-fhir-aggregate-pipeline",
+  "version": "1.0.0",
+  "description": "Fetches FHIR Immunization resources and writes aggregate counts into DHIS2's Aggregate API (dataValueSets).",
+  "type": "module",
+  "main": "run.mjs",
+  "scripts": {
+    "start": "node run.mjs",
+    "test": "node run.test.mjs"
+  },
+  "license": "MIT",
+  "author": "Khalilur Rahman Ridoy Khan",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/khalilurrrahmanridoykhan/dhis2-fhir-aggregate-pipeline.git"
+  },
+  "keywords": ["fhir", "dhis2", "healthcare-interoperability", "aggregate-data", "hl7-fhir"],
+  "engines": {
+    "node": ">=18"
+  }
+}

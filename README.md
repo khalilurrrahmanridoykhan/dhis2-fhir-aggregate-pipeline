@@ -1,5 +1,8 @@
 # DHIS2 FHIR Aggregate Pipeline
 
+[![CI](https://github.com/khalilurrrahmanridoykhan/dhis2-fhir-aggregate-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/khalilurrrahmanridoykhan/dhis2-fhir-aggregate-pipeline/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Fetches FHIR `Immunization` resources, counts them by vaccine and month, and writes the totals into DHIS2's **Aggregate API** (`dataValueSets`) -- a genuinely different data model from DHIS2's Tracker API, which stores one record per individual event rather than one summarized count per period.
 
 Written as a companion exploration to two DHIS2/FHIR apps ([`dhis2-fhir-mapping-studio`](https://github.com/khalilurrrahmanridoykhan/dhis2-fhir-mapping-studio) and [`dhis2-fhir-sync-console`](https://github.com/khalilurrrahmanridoykhan/dhis2-fhir-sync-console)) that both write to DHIS2 Tracker. This one is standalone -- no code or runtime dependency on either.
@@ -45,6 +48,8 @@ Any other vaccine code is reported as **skipped**, not silently dropped or misco
 ## Running the tests
 
 ```bash
+npm test
+# or directly:
 node run.test.mjs
 ```
 
