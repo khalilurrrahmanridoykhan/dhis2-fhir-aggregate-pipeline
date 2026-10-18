@@ -49,7 +49,23 @@
   },
   {
     "resourceType": "Immunization",
-    "id": "sample-7-unmapped",
+    "id": "sample-7",
+    "status": "completed",
+    "vaccineCode": { "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "05", "display": "measles" }] },
+    "patient": { "reference": "Patient/pt-008" },
+    "occurrenceDateTime": "2026-10-06"
+  },
+  {
+    "resourceType": "Immunization",
+    "id": "sample-8",
+    "status": "completed",
+    "vaccineCode": { "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "05", "display": "measles" }] },
+    "patient": { "reference": "Patient/pt-009" },
+    "occurrenceDateTime": "2026-10-17"
+  },
+  {
+    "resourceType": "Immunization",
+    "id": "sample-9-unmapped",
     "status": "completed",
     "vaccineCode": { "coding": [{ "system": "http://hl7.org/fhir/sid/cvx", "code": "03", "display": "MMR" }] },
     "patient": { "reference": "Patient/pt-007" },

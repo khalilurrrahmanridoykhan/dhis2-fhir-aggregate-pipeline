@@ -32,11 +32,14 @@ Specifically, it writes to the real **"BCG doses given"** and **"Yellow Fever do
 
 This is a mini pipeline with a deliberately bounded v1, not a general-purpose one.
 
-**Vaccine mapping** (`lib/vaccineMapping.mjs`): only 2 entries, both real CVX codes independently cross-checked against the CDC's own CVX code set before being added:
+**Vaccine mapping** (`lib/vaccineMapping.mjs`): 3 entries, each a real CVX code independently cross-checked against the CDC's own CVX code set before being added:
 - CVX `19` (BCG) -> `BCG doses given`
 - CVX `37` (Yellow Fever) -> `Yellow Fever doses given`
+- CVX `05` (measles, standalone) -> `Measles doses given`
 
-Any other vaccine code is reported as **skipped**, not silently dropped or miscounted. The Sierra Leone demo database has "doses given" data elements for more EPI vaccines (Measles, OPV0-3, PCV1-3, Penta1-3, TT1-5) -- they're left unmapped here because their exact CVX codes weren't independently verified; adding them is a natural next step once confirmed against the CDC list, not a silent gap.
+Any other vaccine code is reported as **skipped**, not silently dropped or miscounted.
+
+The Sierra Leone demo database also has "doses given" data elements for OPV0-3, PCV1-3, Penta1-3, and TT1-5 -- these are left unmapped for a different reason than BCG/Yellow Fever/Measles were initially: each of those vaccines has a **separate DHIS2 data element per dose number** in the series, but a FHIR `vaccineCode` alone only identifies the vaccine product, not which dose it was -- that lives in `protocolApplied.doseNumber`, a different field entirely. Mapping these correctly needs a two-key (vaccine + dose number) lookup, not the simple single-key table above -- a real follow-up piece of work, not an oversight.
 
 **Fixed dimensions**, not resolved from the data:
 - `orgUnit` -- every count is written against `Ngelehun CHC`. Real FHIR -> DHIS2 org unit resolution (from a FHIR `Location`/`Organization` reference) is a separate, nontrivial problem, out of scope here.
